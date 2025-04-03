@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Lafan Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            touch-action: manipulation;
+        }
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .counters {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+        .counter {
+            font-size: 1.5em;
+            margin: 10px;
+            flex: 1;
+            text-align: center;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 50px;
+            font-size: 2em;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            flex: 1;
+            color: white;
+        }
+        .viavel {
+            background-color: #28a745;
+        }
+        .nao-viavel {
+            background-color: #dc3545;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+        .restart {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .restart:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+        }
+        .alert button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="alert" id="orientationAlert">
+        Virar a tela do aparelho de lado para melhor otimização do contador
+        <br>
+        <button onclick="closeAlert()">OK</button>
+    </div>
+
+    <h1>Contador de Espermatozoides</h1>
+    <div class="counters">
+        <div class="counter">
+            <span>Viáveis: </span><span id="viavelCount">0</span>
+        </div>
+        <div class="counter">
+            <span>Não Viáveis: </span><span id="naoViavelCount">0</span>
+        </div>
+    </div>
+    <div class="buttons">
+        <button class="viavel" id="viavelButton" onclick="incrementViavel()">Viável</button>
+        <button class="nao-viavel" id="naoViavelButton" onclick="incrementNaoViavel()">Não Viável</button>
+    </div>
+    <div class="result">
+        Total: <span id="totalCount">0</span>
+    </div>
+    <button class="restart" id="restartButton" onclick="restartCount()" disabled>Reiniciar</button>
+
+    <script>
+        let viavelCount = 0;
+        let naoViavelCount = 0;
+        const limit = 200;
+
+        function incrementViavel() {
+            if (viavelCount + naoViavelCount < limit) {
+                viavelCount++;
+                updateCounts();
+            }
+        }
+
+        function incrementNaoViavel() {
+            if (viavelCount + naoViavelCount < limit) {
+                naoViavelCount++;
+                updateCounts();
+            }
+        }
+
+        function updateCounts() {
+            document.getElementById('viavelCount').textContent = viavelCount;
+            document.getElementById('naoViavelCount').textContent = naoViavelCount;
+            const totalCount = viavelCount + naoViavelCount;
+            document.getElementById('totalCount').textContent = totalCount;
+
+            if (totalCount >= limit) {
+                disableButtons();
+                document.getElementById('restartButton').disabled = false;
+            }
+        }
+
+        function disableButtons() {
+            document.getElementById('viavelButton').disabled = true;
+            document.getElementById('naoViavelButton').disabled = true;
+        }
+
+        function restartCount() {
+            viavelCount = 0;
+            naoViavelCount = 0;
+            updateCounts();
+            document.getElementById('viavelButton').disabled = false;
+            document.getElementById('naoViavelButton').disabled = false;
+            document.getElementById('restartButton').disabled = true;
+        }
+
+        function closeAlert() {
+            document.getElementById('orientationAlert').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
